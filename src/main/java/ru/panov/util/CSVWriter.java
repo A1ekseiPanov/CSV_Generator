@@ -4,6 +4,8 @@ import ru.panov.annotations.CSV;
 import ru.panov.annotations.Column;
 import ru.panov.annotations.Lazy;
 import ru.panov.annotations.Transient;
+import ru.panov.exceptions.CSVSerializationException;
+import ru.panov.exceptions.FieldAccessException;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -11,16 +13,29 @@ import java.util.stream.Collectors;
 
 import static ru.panov.util.Constants.DELIMITER;
 
-public class ObjectHandler<T> {
+/**
+ * Класс для сериализации объектов в формат CSV.
+ *
+ * @param <T> тип объектов, которые будут сериализованы
+ */
+public class CSVWriter<T> {
 
+    /**
+     * Преобразует список объектов в формат CSV.
+     *
+     * @param data список объектов, которые будут преобразованы
+     * @return список строк, представляющих объекты в формате CSV
+     * @throws IllegalArgumentException  если входные данные пусты или равны null
+     * @throws CSVSerializationException если класс объекта не имеет аннотации @CSV
+     */
     public List<String> objectToCsv(List<T> data) {
-        if (data.isEmpty()) {
-            return Collections.emptyList();
+        if (data == null || data.isEmpty()) {
+            throw new IllegalArgumentException("Входные данне пустые или null");
         }
         T d = data.get(0);
 
         if (!d.getClass().isAnnotationPresent(CSV.class)) {
-            throw new RuntimeException("Класс %s не может быть записан в CSV файл"
+            throw new CSVSerializationException("Класс %s не может быть записан в CSV файл, отсутствует аннотация над классом"
                     .formatted(d.getClass().getSimpleName()));
         }
 
@@ -35,18 +50,19 @@ public class ObjectHandler<T> {
             dataList.add(Arrays.stream(getFields(t))
                     .filter(field -> !field.isAnnotationPresent(Transient.class))
                     .map(field -> {
+                        Object fieldValue = getFieldValue(field, t);
                         if (field.isAnnotationPresent(Lazy.class)) {
                             return " ";
                         }
-                        if (this.isCollection(getFieldValue(field, t))) {
-                            Collection<?> list = (Collection<?>) getFieldValue(field, t);
+                        if (this.isCollection(fieldValue)) {
+                            Collection<?> list = (Collection<?>) fieldValue;
                             return this.nestedCollectionToString(list);
                         }
-                        if (this.isMap(getFieldValue(field, t))) {
-                            Map<?, ?> map = (Map<?, ?>) getFieldValue(field, t);
+                        if (this.isMap(fieldValue)) {
+                            Map<?, ?> map = (Map<?, ?>) fieldValue;
                             return this.nestedMapToString(map);
                         }
-                        return getFieldValue(field, t) != null ? getFieldValue(field, t).toString() : "";
+                        return fieldValue != null ? fieldValue.toString() : "";
                     }).collect(Collectors.joining(DELIMITER)));
         });
         return dataList;
@@ -61,13 +77,12 @@ public class ObjectHandler<T> {
         return column != null ? column.name() : field.getName();
     }
 
-
     private Object getFieldValue(Field field, Object object) {
         try {
             field.setAccessible(true);
             return field.get(object);
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+            throw new FieldAccessException("Не удалось получить значение поля " + field.getName());
         }
     }
 

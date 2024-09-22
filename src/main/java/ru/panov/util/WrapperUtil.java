@@ -3,10 +3,15 @@ package ru.panov.util;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Утилитный класс для работы с типами-обертками.
+ */
 public final class WrapperUtil {
     private WrapperUtil() {
     }
+
     private static final Map<Class<?>, Class<?>> WRAPPER_TYPE_MAP;
+
     static {
         WRAPPER_TYPE_MAP = new HashMap<>(16);
         WRAPPER_TYPE_MAP.put(Integer.class, int.class);
@@ -20,6 +25,12 @@ public final class WrapperUtil {
         WRAPPER_TYPE_MAP.put(Void.class, void.class);
     }
 
+    /**
+     * Проверяет, является ли переданный объект типом-оберткой примитивного типа.
+     *
+     * @param source объект, который необходимо проверить
+     * @return {@code true}, если объект является типом-оберткой примитивного типа, {@code false} в противном случае
+     */
     public static boolean isPrimitiveType(Object source) {
         return WRAPPER_TYPE_MAP.containsKey(source.getClass());
     }

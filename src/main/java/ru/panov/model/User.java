@@ -23,9 +23,10 @@ public class User {
     private final List<Cat> cats;
     @Transient
     private final Set<Integer> set;
-    private final Map<String, Cat> map;
+    private final Map<String, Integer> map;
 
-    public User(Long id, String firstName, String lastName, LocalDate birthday, List<Cat> cats, Set<Integer> set, Map<String, Cat> map) {
+    public User(Long id, String firstName, String lastName, LocalDate birthday,
+                List<Cat> cats, Set<Integer> set, Map<String, Integer> map) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -34,24 +35,4 @@ public class User {
         this.set = set;
         this.map = map;
     }
-
-    //    public User(Long id, String firstName, String lastName,
-//                LocalDate birthday, List<Cat> cats, Set<Integer> set) {
-//        this.id = id;
-//        this.firstName = firstName;
-//        this.lastName = lastName;
-//        this.birthday = birthday;
-//        this.cats = cats;
-//        this.set = set;
-//    }
-//    public User(Long id, String firstName, String lastName,
-//                LocalDate birthday, List<Cat> cats) {
-//        this.id = id;
-//        this.firstName = firstName;
-//        this.lastName = lastName;
-//        this.birthday = birthday;
-//        this.cats = cats;
-//    }
-
-
 }

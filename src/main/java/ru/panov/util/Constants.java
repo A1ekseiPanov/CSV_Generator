@@ -1,5 +1,8 @@
 package ru.panov.util;
 
+/**
+ * Класс, содержащий константы, используемые в приложении.
+ */
 public final class Constants {
     private Constants() {
     }
