@@ -6,5 +6,5 @@ public final class Constants {
 
     public static final String DELIMITER = ",";
 
-    public static final String PATH_FILE = "path/to/file.csv";;
+    public static final String PATH_FILE = "path/to/file.csv";
 }

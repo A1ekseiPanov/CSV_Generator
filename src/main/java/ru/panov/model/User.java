@@ -1,27 +1,57 @@
 package ru.panov.model;
 
-import java.io.Serializable;
+import ru.panov.annotations.CSV;
+import ru.panov.annotations.Column;
+import ru.panov.annotations.Lazy;
+import ru.panov.annotations.Transient;
 
-public class User implements Serializable {
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+@CSV
+public class User {
     private final Long id;
+    @Column(name = "Имя")
     private final String firstName;
+    @Column(name = "Фамилия")
     private final String lastName;
-    private final String email;
+    @Column(name = "День рождения")
+    private final LocalDate birthday;
+    @Lazy
+    private final List<Cat> cats;
+    @Transient
+    private final Set<Integer> set;
+    private final Map<String, Cat> map;
 
-    public User(Long id, String firstName, String lastName, String email) {
+    public User(Long id, String firstName, String lastName, LocalDate birthday, List<Cat> cats, Set<Integer> set, Map<String, Cat> map) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
+        this.birthday = birthday;
+        this.cats = cats;
+        this.set = set;
+        this.map = map;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                '}';
-    }
+    //    public User(Long id, String firstName, String lastName,
+//                LocalDate birthday, List<Cat> cats, Set<Integer> set) {
+//        this.id = id;
+//        this.firstName = firstName;
+//        this.lastName = lastName;
+//        this.birthday = birthday;
+//        this.cats = cats;
+//        this.set = set;
+//    }
+//    public User(Long id, String firstName, String lastName,
+//                LocalDate birthday, List<Cat> cats) {
+//        this.id = id;
+//        this.firstName = firstName;
+//        this.lastName = lastName;
+//        this.birthday = birthday;
+//        this.cats = cats;
+//    }
+
+
 }

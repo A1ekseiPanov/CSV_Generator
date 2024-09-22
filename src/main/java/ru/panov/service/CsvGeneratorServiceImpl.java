@@ -1,66 +1,24 @@
 package ru.panov.service;
 
 import ru.panov.repository.GeneratorRepository;
+import ru.panov.util.ObjectHandler;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static ru.panov.util.Constants.DELIMITER;
-
-public class CsvGeneratorServiceImpl implements GeneratorService {
+public class CsvGeneratorServiceImpl<T> implements GeneratorService<T> {
     private final GeneratorRepository repository;
+    private final ObjectHandler<T>objectHandler;
 
-    public CsvGeneratorServiceImpl(GeneratorRepository repository) {
+    public CsvGeneratorServiceImpl(GeneratorRepository repository,
+                                   ObjectHandler<T> objectHandler) {
         this.repository = repository;
+        this.objectHandler = objectHandler;
     }
 
-    public void writeToFile(String path, List<Object> objectList) {
-        List<String> data = new ArrayList<>();
+    public void writeToFile(String path, List<T> data) {
 
-        if (objectList == null || objectList.isEmpty()) {
-            return;
-        }
-        data.add(getHeader(objectList.get(0)));
+        List<String> stringDataList = objectHandler.objectToCsv(data);
 
-        data.addAll(objectList.stream()
-                .map(this::getValues)
-                .toList());
-
-        repository.writeToFile(path, data);
-    }
-
-    private String getHeader(Object o) {
-        return String.join(DELIMITER, getFieldNames(o));
-    }
-
-    private String getValues(Object o) {
-        return String.join(DELIMITER, getFieldValues(o));
-    }
-
-    private List<String> getFieldNames(Object o) {
-        return Arrays.stream(getFields(o))
-                .map(Field::getName)
-                .collect(Collectors.toList());
-    }
-
-    private List<String> getFieldValues(Object o) {
-        return Arrays.stream(getFields(o))
-                .map(field -> {
-                    field.setAccessible(true);
-                    try {
-                        Object value = field.get(o);
-                        return value != null ? value.toString() : "";
-                    } catch (IllegalAccessException e) {
-                        throw new RuntimeException("Проблемы при получении значения поля");
-                    }
-                })
-                .collect(Collectors.toList());
-    }
-
-    private Field[] getFields(Object o) {
-        return o.getClass().getDeclaredFields();
+        repository.writeToFile(path, stringDataList);
     }
 }
