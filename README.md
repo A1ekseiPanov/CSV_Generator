@@ -18,3 +18,24 @@ git clone https://github.com/A1ekseiPanov/CSV_Generator.git
 - Откройте проект в вашей среде разработки
 - Найдите класс Main.java
 - Произведите запуск
+
+Для подключения библиотеки как зависимости добавить в pom.xml
+```
+<repositories>
+    <repository>
+        <id>CSV_Generator-mvn-repo</id>
+        <url>https://github.com/A1ekseiPanov/CSV_Generator/raw/mvn-repo/</url>
+        <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>always</updatePolicy>
+        </snapshots>
+    </repository>
+</repositories>
+<dependencies>
+    <dependency>
+        <groupId>ru.panov</groupId>
+        <artifactId>CSV_Generator</artifactId>
+        <version>1.0</version>
+    </dependency>
+</dependencies>
+```
