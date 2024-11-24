@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
  * CSV.
  * </p>
  *
- * <h3>Пример использования:</h3>
+ * <h2>Пример использования:</h2>
  * <pre>{@code
  * public class User {
  *     private int id;

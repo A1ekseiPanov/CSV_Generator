@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * которое будет соответствовать полю класса.
  * </p>
  *
- * <h3>Пример использования:</h3>
+ * <h2>Пример использования:</h2>
  * <pre>{@code
  * public class User {
  *
