@@ -38,7 +38,7 @@ class CSVConverterTest {
         assertNotNull(csvOutput);
         assertEquals(2, csvOutput.size());
         assertEquals("ID,Имя,lazyField,Вложенный лист,Вложенная мапа", csvOutput.get(0));
-        assertEquals("1,Пушкин А.С., ,[ {A}; {B} ],[ {Key: key1; Value: 1}; {Key: key2; Value: 2} ]", csvOutput.get(1));
+        assertEquals("1,Пушкин А.С.,,[{A}; {B}],[{key1: 1}; {key2: 2}]", csvOutput.get(1));
     }
 
     @Test

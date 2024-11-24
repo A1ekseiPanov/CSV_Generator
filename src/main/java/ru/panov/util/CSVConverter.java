@@ -12,6 +12,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static ru.panov.util.Constants.DELIMITER;
+import static ru.panov.util.Constants.EMPTY_STR;
 
 /**
  * Класс для сериализации объектов в формат CSV.
@@ -29,14 +30,16 @@ public class CSVConverter<T> {
      * @throws CSVSerializationException если класс объекта не имеет аннотации @CSV
      */
 
-    public List<String> objectListConvertToCSV(List<T> data) {
+    public List<String> objectListConvertToCSV(List<T> data) throws IllegalArgumentException,
+            CSVSerializationException {
         if (data == null || data.isEmpty()) {
             throw new IllegalArgumentException("Входные данне пустые или null");
         }
         T d = data.get(0);
 
         if (!d.getClass().isAnnotationPresent(CSV.class)) {
-            throw new CSVSerializationException("Класс %s не может быть записан в CSV файл, отсутствует аннотация над классом"
+            throw new CSVSerializationException(("Класс %s не может быть записан в CSV файл," +
+                    " отсутствует аннотация над классом")
                     .formatted(d.getClass().getSimpleName()));
         }
 
@@ -53,7 +56,7 @@ public class CSVConverter<T> {
                     .map(field -> {
                         Object fieldValue = getFieldValue(field, t);
                         if (field.isAnnotationPresent(Lazy.class)) {
-                            return " ";
+                            return EMPTY_STR;
                         }
                         if (this.isCollection(fieldValue)) {
                             Collection<?> list = (Collection<?>) fieldValue;
@@ -66,7 +69,7 @@ public class CSVConverter<T> {
                         if (!this.isSystemClass(fieldValue)) {
                             return this.getCollect(fieldValue);
                         }
-                        return fieldValue != null ? fieldValue.toString() : "";
+                        return fieldValue != null ? fieldValue.toString() : EMPTY_STR;
                     }).collect(Collectors.joining(DELIMITER)));
         });
         return dataList;
@@ -81,7 +84,7 @@ public class CSVConverter<T> {
         return column != null ? column.name() : field.getName();
     }
 
-    private Object getFieldValue(Field field, Object object) {
+    private Object getFieldValue(Field field, Object object) throws FieldAccessException {
         try {
             field.setAccessible(true);
             return field.get(object);
@@ -103,7 +106,7 @@ public class CSVConverter<T> {
                         return getCollect(item);
                     }
                 })
-                .collect(Collectors.joining("; ", "[ ", " ]"));  // Форматирование через точку с запятой
+                .collect(Collectors.joining("; ", "[", "]"));  // Форматирование через точку с запятой
     }
 
     private String nestedMapToString(Map<?, ?> nestedMap) {
@@ -118,9 +121,9 @@ public class CSVConverter<T> {
                     keyStr = getString(key);
                     valueStr = getString(value);
 
-                    return "{Key: " + keyStr + "; Value: " + valueStr + "}";
+                    return "{" + keyStr + ": " + valueStr + "}";
                 })
-                .collect(Collectors.joining("; ", "[ ", " ]"));  // Форматирование через точку с запятой
+                .collect(Collectors.joining("; ", "[", "]"));  // Форматирование через точку с запятой
     }
 
     private String getString(Object value) {
@@ -139,11 +142,11 @@ public class CSVConverter<T> {
 
     private String getCollect(Object object) {
         if (object == null) {
-            return "";
+            return EMPTY_STR;
         }
         return Arrays.stream(getFields(object))
                 .map(f -> this.getFieldName(f) + " : " + this.getFieldValue(f, object))
-                .collect(Collectors.joining(" ; ", "{ ", " }"));
+                .collect(Collectors.joining(" ; ", "{", "}"));
     }
 
     private boolean isCollection(Object o) {

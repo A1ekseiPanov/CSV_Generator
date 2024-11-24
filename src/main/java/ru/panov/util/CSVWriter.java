@@ -14,6 +14,7 @@ import java.util.List;
  */
 public class CSVWriter<T> {
     CSVConverter<T> converter = new CSVConverter<>();
+
     /**
      * Записывает список объектов в файл в формате CSV.
      *
@@ -21,7 +22,7 @@ public class CSVWriter<T> {
      * @param path Путь к файлу, в который будут записаны данные.
      * @throws FileWriteException Если произошла ошибка при записи в файл.
      */
-    public void writeToFile(List<T> data, String path) {
+    public void writeToFile(List<T> data, String path) throws FileWriteException {
         Path p = Path.of(path);
         try {
             if (p.getParent() != null && !Files.exists(p.getParent())) {

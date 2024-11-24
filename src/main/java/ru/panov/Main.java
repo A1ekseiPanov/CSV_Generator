@@ -18,9 +18,11 @@ public class Main {
         Cat cat2 = new Cat("Ба111", 233);
 
         User user1 = new User(1L, "Илон", "Маск",
-                LocalDate.of(1992, 12, 14), List.of(cat,cat2),Set.of(1,2), Map.of("key1", 1, "key2", 2));
+                LocalDate.of(1992, 12, 14),
+                List.of(cat,cat2),Set.of(1,2), Map.of("key1", 1, "key2", 2));
         User user2 = new User(1L, "Илон", "Маск",
-                LocalDate.of(1992, 12, 14), List.of(cat),Set.of(1,2,3), Map.of("key1", 122, "key2", 22));
+                LocalDate.of(1992, 12, 14),
+                List.of(cat),Set.of(1,2,3), Map.of("key1", 122, "key2", 22));
 
         List<User> users = List.of(user1, user2);
 
