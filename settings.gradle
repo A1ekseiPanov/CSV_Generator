@@ -1,0 +1,2 @@
+rootProject.name = 'CSV_Generator'
+include('lib')

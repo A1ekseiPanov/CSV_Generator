@@ -9,33 +9,32 @@
 
 #### Требования
 - Java 15+
-- Maven для управления зависимостями
 
 ##### Установка и запуск
 - Склонируйте репозиторий:
 Копировать код
 git clone https://github.com/A1ekseiPanov/CSV_Generator.git
 - Откройте проект в вашей среде разработки
-- Найдите класс Main.java
-- Произведите запуск
-
-Для подключения библиотеки как зависимости добавить в pom.xml
+- Откройте командную строку
+- Добавляем зависимость в локальный репозиторий:
 ```
-<repositories>
-    <repository>
-        <id>CSV_Generator-mvn-repo</id>
-        <url>https://github.com/A1ekseiPanov/CSV_Generator/raw/mvn-repo/</url>
-        <snapshots>
-            <enabled>true</enabled>
-            <updatePolicy>always</updatePolicy>
-        </snapshots>
-    </repository>
-</repositories>
-<dependencies>
-    <dependency>
-        <groupId>ru.panov</groupId>
-        <artifactId>CSV_Generator</artifactId>
-        <version>1.0</version>
-    </dependency>
-</dependencies>
+./gradlew publishToMavenLocal
+```
+- Подключаем зависимость в проект:
+
+Для подключения библиотеки через maven как зависимости добавить в pom.xml:
+```
+    <dependencies>
+        <dependency>
+            <groupId>ru.panov</groupId>
+            <artifactId>CSW-generator</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+    </dependencies>
+```
+Для подключения библиотеки через gradel как зависимости добавить в build.gradel:
+```
+dependencies {
+    implementation 'ru.panov:CSV-generator:1.0.0'
+}
 ```

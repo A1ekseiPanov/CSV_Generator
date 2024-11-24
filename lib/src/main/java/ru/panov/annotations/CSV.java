@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * в формат CSV.
  * </p>
  *
- * <h3>Пример использования:</h3>
+ * <h2>Пример использования:</h2>
  * <pre>{@code
  * @CSV
  * public class User {
